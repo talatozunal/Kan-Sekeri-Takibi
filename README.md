@@ -36,7 +36,7 @@ Managing diabetes is mostly about consistency: measuring at the right moments an
 This app is intentionally narrow:
 
 - **One job** — write down today's readings quickly.
-- **One screen** — no tabs, no menus, no setup.
+- **One screen** — no tabs, no setup.
 - **One device** — data is stored locally in `AppStorage`, never uploaded.
 - **One tap to share** — a plain-text report that any doctor or nurse can read.
 

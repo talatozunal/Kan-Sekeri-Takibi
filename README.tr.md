@@ -36,7 +36,7 @@ Diyabet yönetimi büyük ölçüde düzen meselesidir: doğru zamanlarda ölçm
 Bu uygulama bilinçli olarak dar tutuldu:
 
 - **Tek iş** — bugünün ölçümlerini hızlıca yazmak.
-- **Tek ekran** — sekme, menü, kurulum yok.
+- **Tek ekran** — sekme ve kurulum yok.
 - **Tek cihaz** — veriler `AppStorage` içinde yerel olarak saklanır, hiçbir yere gönderilmez.
 - **Tek dokunuşla paylaşım** — herhangi bir hekimin veya hemşirenin okuyabileceği düz metin raporu.
 
