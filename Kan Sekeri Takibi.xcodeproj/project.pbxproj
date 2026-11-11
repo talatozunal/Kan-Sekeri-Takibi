@@ -86,10 +86,14 @@
 				};
 			};
 			buildConfigurationList = EBD8175A2F654F7E008B1DB8 /* Build configuration list for PBXProject "Kan Sekeri Takibi" */;
-			developmentRegion = en;
+			developmentRegion = tr;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				tr,
 				en,
+				de,
+				fr,
+				it,
 				Base,
 			);
 			mainGroup = EBD817562F654F7E008B1DB8;

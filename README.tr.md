@@ -6,7 +6,8 @@
 
 <p align="center">
   iPhone ve iPad için sakin, tek ekranlı bir kan şekeri günlüğü.<br>
-  Sabah, öğle ve akşam ölçümlerinizi kaydedin, cihazınızda saklayın ve düzenli bir metin raporu olarak paylaşın.
+  Sabah, öğle ve akşam ölçümlerinizi kaydedin, cihazınızda saklayın ve düzenli bir metin raporu olarak paylaşın.<br>
+  Türkçe, İngilizce, Almanca, Fransızca ve İtalyanca olarak kullanılabilir.
 </p>
 
 <p align="center">
@@ -50,7 +51,7 @@ Bu bir kişisel takip aracıdır; **tıbbi cihaz değildir** ve **tıbbi tavsiye
 </p>
 
 <p align="center">
-  <sub>Ölçüm formu ve alttaki bilgi barı içeren ana ekran &nbsp;·&nbsp; Sürüm, yıl, sorumlu ve iletişim bilgisini gösteren bilgi paneli</sub>
+  <sub>Ölçüm formu ve alttaki bilgi barı içeren ana ekran &nbsp;·&nbsp; Sürüm, yıl, sorumlu, dil seçici ve iletişim bilgisini gösteren bilgi paneli</sub>
 </p>
 
 ## Özellikler
@@ -64,9 +65,26 @@ Bu bir kişisel takip aracıdır; **tıbbi cihaz değildir** ve **tıbbi tavsiye
 - **Açık ve koyu mod** — dinamik renkler her iki görünümde de okunabilirliği korur.
 - **Tek çerçeve düzeni** — her şey yuvarlatılmış tek bir kart içinde, ortalanmış ve iPad'de 620 pt ile sınırlı; hiçbir genişlikte yatay taşma olmaz.
 - **Bilgi barı** — alt kenarda ince bir şerit; dokununca sürüm, yıl, sorumlu, iletişim adresi ve “Kapat” butonunu içeren panel açılır.
-- **Türkçe arayüz** — uygulama tasarım gereği Türkçe (`tr_TR`) yerelleştirilmiştir.
+- **Beş dil** — Türkçe, İngilizce, Almanca, Fransızca ve İtalyanca; bilgi panelinden uygulama yeniden başlatılmadan değiştirilebilir.
+
+## Diller
+
+Arayüz **Türkçe, İngilizce, Almanca, Fransızca ve İtalyanca** olarak kullanılabilir. İlk açılışta cihaz dili esas alınır; dilediğiniz zaman **Bilgi → Dil** bölümünden uygulamayı yeniden başlatmadan değiştirebilirsiniz. Seçim `UserDefaults` (anahtar: `appLanguage`) içinde saklanır ve tüm etiketler, yer tutucular, tarihler ve rapor anında güncellenir.
+
+Geliştirme dili Türkçe olduğu için yedek dil de Türkçedir: seçili dilde bir anahtar eksikse Türkçe metin gösterilir.
+
+### Yeni dil ekleme
+
+1. `<kod>.lproj` klasörlerinden birini (örneğin `en.lproj`) kopyalayıp yeni dil koduna göre adlandırın.
+2. `Localizable.strings` ve `InfoPlist.strings` dosyalarını anahtarları değiştirmeden çevirin.
+3. `Dil.swift` içindeki `Yerellestirme.desteklenenDiller` listesine kodu, `UygulamaDili` enum'una da bir case ekleyin.
+4. Xcode projesindeki `knownRegions` listesine dili ekleyin.
+
+Storyboard veya görsel değişikliği gerekmez.
 
 ## Nasıl kullanılır?
+
+Bu belgedeki buton adları Türkçe gösterilmiştir; uygulama seçili dilde aynı terimleri kullanır.
 
 1. Uygulamayı açın. Bugünün tarihi otomatik seçilidir.
 2. Elinizdeki ölçümleri girin — örneğin kahvaltı aç `110`, tok `140`. Altı alanın tamamını doldurmak zorunda değilsiniz.
@@ -74,6 +92,7 @@ Bu bir kişisel takip aracıdır; **tıbbi cihaz değildir** ve **tıbbi tavsiye
 4. Bir kaydı silmek için sola kaydırın.
 5. Kayıtları paylaşmak istediğinizde **Rapor** kartındaki **Paylaş** butonuna dokunun. Metin dosyası oluşturulur ve iOS paylaşım sayfası açılır.
 6. Sürüm ve iletişim bilgileri için alttaki **Bilgi** barına dokunun.
+7. Dili değiştirmek için **Bilgi** barına dokunun, **Dil** bölümünden bir dil seçin ve paneli kapatın — tüm arayüz anında güncellenir.
 
 ### Alan açıklamaları
 
@@ -99,6 +118,7 @@ Ana çerçevenin altındaki şerit kalıcı ve küçüktür. Dokunulduğunda şu
 
 - “Bu uygulama herhangi bir ücret talep etmemektedir. Geliştirme aşamasındadır.”
 - Sürüm **1.0.0**, yıl **2026**, sorumlu **Talat Özünal**
+- Anında uygulanan bir dil seçici (**Sistem** ve beş dil)
 - İletişim: **ozunaltalat@gmail.com** (Mail uygulamasını açar)
 - **Kapat** butonu
 
@@ -125,6 +145,8 @@ Kan Sekeri Takibi/
 │   ├── Kan_Sekeri_TakibiApp.swift   # Uygulama giriş noktası
 │   ├── ContentView.swift            # Model, tema, ana ekran, geçmiş, rapor
 │   ├── BilgiBari.swift              # Bilgi barı + bilgi paneli
+│   ├── Dil.swift                    # Dil yöneticisi + dil seçici
+│   ├── tr.lproj … it.lproj/         # Localizable.strings + InfoPlist.strings
 │   └── Assets.xcassets              # Uygulama simgesi ve vurgu rengi
 ├── docs/
 │   ├── icon.png
@@ -139,6 +161,7 @@ Kan Sekeri Takibi/
 - `Tema` — dinamik açık/koyu renkler ve mavi/cyan geçişi.
 - `ContentView` — form, geçmiş, kalıcılık ve rapor üretimi.
 - `BilgiBari` / `BilgiSayfasi` — alt bar ve bilgi paneli.
+- `Yerellestirme` / `DilSecici` — `UserDefaults` içinde saklanan dil seçimi ve uygulama içi dil menüsü.
 
 ## Gereksinimler
 

@@ -4,6 +4,8 @@ import SwiftUI
 // Alt kenarda duran ince bar; dokununca ayrıntılı bilgi paneli açılır.
 
 struct BilgiBari: View {
+    @EnvironmentObject private var dil: Yerellestirme
+
     @Binding var acik: Bool
 
     var body: some View {
@@ -22,21 +24,21 @@ struct BilgiBari: View {
                 }
 
                 VStack(alignment: .leading, spacing: 1) {
-                    Text("Bilgi")
+                    Text(dil.metin("ortak.bilgi"))
                         .font(.system(size: 12.5, weight: .bold, design: .rounded))
                         .foregroundStyle(Tema.metin)
 
-                    Text("Ücretsiz uygulama • Sürüm 1.0.0")
+                    Text(dil.metin("ortak.ucretsiz"))
                         .font(.system(size: 10.5, weight: .medium, design: .rounded))
                         .foregroundStyle(Tema.ikincil)
                         .lineLimit(1)
-                        .minimumScaleFactor(0.85)
+                        .minimumScaleFactor(0.75)
                 }
 
                 Spacer(minLength: 6)
 
                 HStack(spacing: 4) {
-                    Text("Detaylar")
+                    Text(dil.metin("ortak.detaylar"))
                     Image(systemName: "chevron.right")
                         .font(.system(size: 9, weight: .bold))
                 }
@@ -60,6 +62,7 @@ struct BilgiBari: View {
 // MARK: - BİLGİ PANELİ
 
 struct BilgiSayfasi: View {
+    @EnvironmentObject private var dil: Yerellestirme
     @Environment(\.dismiss) private var kapat
 
     var body: some View {
@@ -68,16 +71,18 @@ struct BilgiSayfasi: View {
                 VStack(alignment: .leading, spacing: 16) {
                     baslik
 
-                    metin("Bu uygulama herhangi bir ücret talep etmemektedir. Geliştirme aşamasındadır.")
+                    metin(dil.metin("ortak.ucret"))
 
                     surumKutusu
+
+                    DilSecici()
 
                     iletisimBolumu
 
                     Button {
                         kapat()
                     } label: {
-                        Text("Kapat")
+                        Text(dil.metin("ortak.kapat"))
                             .font(.system(size: 15, weight: .bold, design: .rounded))
                             .foregroundStyle(.white)
                             .frame(maxWidth: .infinity)
@@ -113,11 +118,11 @@ struct BilgiSayfasi: View {
             }
 
             VStack(alignment: .leading, spacing: 2) {
-                Text("Bilgi")
+                Text(dil.metin("ortak.bilgi"))
                     .font(.system(size: 20, weight: .bold, design: .rounded))
                     .foregroundStyle(Tema.metin)
 
-                Text("Uygulama hakkında")
+                Text(dil.metin("ortak.hakkinda"))
                     .font(.system(size: 11.5, weight: .medium, design: .rounded))
                     .foregroundStyle(Tema.ikincil)
             }
@@ -128,9 +133,9 @@ struct BilgiSayfasi: View {
 
     private var surumKutusu: some View {
         VStack(alignment: .leading, spacing: 9) {
-            satir(ikon: "number.circle.fill", metin: "Sürüm 1.0.0")
-            satir(ikon: "calendar", metin: "Yıl: 2026")
-            satir(ikon: "person.crop.circle.fill", metin: "Sorumlu: Talat Özünal")
+            satir(ikon: "number.circle.fill", metin: dil.metin("ortak.surum"))
+            satir(ikon: "calendar", metin: dil.metin("ortak.yil"))
+            satir(ikon: "person.crop.circle.fill", metin: dil.metin("ortak.sorumlu"))
         }
         .padding(14)
         .frame(maxWidth: .infinity, alignment: .leading)
@@ -144,12 +149,12 @@ struct BilgiSayfasi: View {
 
     private var iletisimBolumu: some View {
         VStack(alignment: .leading, spacing: 5) {
-            Text("İLETİŞİM")
+            Text(dil.metin("ortak.iletisim"))
                 .font(.system(size: 10.5, weight: .bold, design: .rounded))
                 .tracking(1)
                 .foregroundStyle(Tema.ikincil)
 
-            Text("Hata ve bilgilendirmeler için iletişim:")
+            Text(dil.metin("ortak.iletisimAlt"))
                 .font(.system(size: 12.5, weight: .medium, design: .rounded))
                 .foregroundStyle(Tema.ikincil)
 

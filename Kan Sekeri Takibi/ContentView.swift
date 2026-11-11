@@ -66,6 +66,9 @@ private enum OdakAlani: Hashable {
 
 // MARK: - 4. ANA EKRAN
 struct ContentView: View {
+    @EnvironmentObject private var dil: Yerellestirme
+    @Environment(\.editMode) private var duzenlemeModu
+
     @State private var secilenTarih = Date()
     @State private var kAc = ""; @State private var kTok = ""
     @State private var oAc = ""; @State private var oTok = ""
@@ -87,7 +90,7 @@ struct ContentView: View {
             .toolbar {
                 ToolbarItemGroup(placement: .keyboard) {
                     Spacer()
-                    Button("Bitti") { odak = nil }
+                    Button(dil.metin("ortak.bitti")) { odak = nil }
                         .font(.system(size: 16, weight: .semibold, design: .rounded))
                 }
             }
@@ -97,7 +100,6 @@ struct ContentView: View {
             }
         }
         .tint(Tema.anaRenk)
-        .environment(\.locale, Locale(identifier: "tr_TR"))
     }
 
     // MARK: - Görsel katmanlar
@@ -164,11 +166,11 @@ struct ContentView: View {
                         .foregroundStyle(.white)
                 }
 
-                Text("Kan Şekeri Takibi")
+                Text(dil.metin("ks.baslik"))
                     .font(.system(size: 20, weight: .bold, design: .rounded))
                     .foregroundStyle(Tema.metin)
 
-                Text("Günlük ölçümlerinizi kaydedin ve paylaşın.")
+                Text(dil.metin("ks.altbaslik"))
                     .font(.system(size: 11.5, weight: .medium, design: .rounded))
                     .foregroundStyle(Tema.ikincil)
                     .multilineTextAlignment(.center)
@@ -179,11 +181,20 @@ struct ContentView: View {
             .padding(.bottom, 8)
 
             if !kayitListesi.isEmpty {
-                EditButton()
-                    .font(.system(size: 14, weight: .semibold, design: .rounded))
-                    .foregroundStyle(Tema.anaRenk)
-                    .padding(.top, 14)
-                    .padding(.trailing, 16)
+                Button {
+                    withAnimation(.easeInOut(duration: 0.2)) {
+                        duzenlemeModu?.wrappedValue = duzenlemeModu?.wrappedValue == .active ? .inactive : .active
+                    }
+                } label: {
+                    Text(duzenlemeModu?.wrappedValue == .active
+                         ? dil.metin("ortak.tamam")
+                         : dil.metin("ks.duzenle"))
+                        .font(.system(size: 14, weight: .semibold, design: .rounded))
+                        .foregroundStyle(Tema.anaRenk)
+                }
+                .buttonStyle(.plain)
+                .padding(.top, 14)
+                .padding(.trailing, 16)
             }
         }
         .overlay(alignment: .bottom) {
@@ -197,13 +208,13 @@ struct ContentView: View {
         kart {
             VStack(alignment: .leading, spacing: 12) {
                 BolumBasligi(ikon: "plus.circle.fill",
-                             baslik: "YENİ ÖLÇÜM",
+                             baslik: dil.metin("ks.yeniOlcum"),
                              ipucu: "mg/dL")
 
                 tarihSatiri
 
                 VStack(spacing: 11) {
-                    OlcumSatiri(baslik: "Kahvaltı",
+                    OlcumSatiri(baslik: dil.metin("ks.kahvalti"),
                                 ikon: "sunrise.fill",
                                 renk: Tema.turuncu,
                                 ac: $kAc, tok: $kTok,
@@ -211,7 +222,7 @@ struct ContentView: View {
                                 acOdak: .kahvaltiAc,
                                 tokOdak: .kahvaltiTok)
 
-                    OlcumSatiri(baslik: "Öğle",
+                    OlcumSatiri(baslik: dil.metin("ks.ogle"),
                                 ikon: "sun.max.fill",
                                 renk: Tema.anaRenk,
                                 ac: $oAc, tok: $oTok,
@@ -219,7 +230,7 @@ struct ContentView: View {
                                 acOdak: .oglenAc,
                                 tokOdak: .oglenTok)
 
-                    OlcumSatiri(baslik: "Akşam",
+                    OlcumSatiri(baslik: dil.metin("ks.aksam"),
                                 ikon: "moon.stars.fill",
                                 renk: Tema.mor,
                                 ac: $aAc, tok: $aTok,
@@ -231,7 +242,7 @@ struct ContentView: View {
                 Button(action: kaydet) {
                     HStack(spacing: 8) {
                         Image(systemName: "plus.circle.fill")
-                        Text("Listeye Kaydet")
+                        Text(dil.metin("ks.kaydet"))
                     }
                     .font(.system(size: 16, weight: .bold, design: .rounded))
                     .foregroundStyle(.white)
@@ -254,7 +265,7 @@ struct ContentView: View {
                 .font(.system(size: 15, weight: .semibold))
                 .foregroundStyle(Tema.anaRenk)
 
-            DatePicker("Tarih", selection: $secilenTarih, displayedComponents: .date)
+            DatePicker(dil.metin("ks.tarih"), selection: $secilenTarih, displayedComponents: .date)
                 .font(.system(size: 15, weight: .semibold, design: .rounded))
 
             Spacer(minLength: 0)
@@ -263,7 +274,7 @@ struct ContentView: View {
                 Button {
                     secilenTarih = Date()
                 } label: {
-                    Text("Bugün")
+                    Text(dil.metin("ks.bugun"))
                         .font(.system(size: 12, weight: .bold, design: .rounded))
                         .foregroundStyle(Tema.anaRenk)
                         .padding(.horizontal, 10)
@@ -291,14 +302,14 @@ struct ContentView: View {
                 }
 
                 VStack(alignment: .leading, spacing: 2) {
-                    Text("RAPOR")
+                    Text(dil.metin("ks.rapor"))
                         .font(.system(size: 11, weight: .bold, design: .rounded))
                         .tracking(1)
                         .foregroundStyle(Tema.ikincil)
 
                     Text(raporURL == nil
-                         ? "Rapor için en az bir kayıt ekleyin"
-                         : "Metin dosyası olarak paylaş")
+                         ? dil.metin("ks.raporBos")
+                         : dil.metin("ks.raporHazir"))
                         .font(.system(size: 12, weight: .medium, design: .rounded))
                         .foregroundStyle(Tema.ikincil)
                         .lineLimit(1)
@@ -313,7 +324,7 @@ struct ContentView: View {
                                                     image: Image(systemName: "doc.text.fill"))) {
                         HStack(spacing: 6) {
                             Image(systemName: "square.and.arrow.up")
-                            Text("Paylaş")
+                            Text(dil.metin("ks.paylas"))
                         }
                         .font(.system(size: 13, weight: .bold, design: .rounded))
                         .foregroundStyle(.white)
@@ -338,8 +349,8 @@ struct ContentView: View {
     @ViewBuilder
     private var gecmisBolumu: some View {
         BolumBasligi(ikon: "clock.arrow.circlepath",
-                     baslik: "GEÇMİŞ KAYITLAR",
-                     ipucu: "\(kayitListesi.count) KAYIT")
+                     baslik: dil.metin("ks.gecmis"),
+                     ipucu: dil.metin("ks.kayitSayisi", kayitListesi.count))
             .frame(maxWidth: 620)
             .frame(maxWidth: .infinity)
             .padding(.horizontal, 20)
@@ -359,7 +370,7 @@ struct ContentView: View {
             }
             .onDelete(perform: sil)
 
-            Text("Silmek için bir kaydı sola kaydırın.")
+            Text(dil.metin("ks.silmeIpucu"))
                 .font(.system(size: 11, weight: .medium, design: .rounded))
                 .foregroundStyle(Tema.ikincil.opacity(0.8))
                 .frame(maxWidth: .infinity)
@@ -377,11 +388,11 @@ struct ContentView: View {
                 .font(.system(size: 24, weight: .light))
                 .foregroundStyle(Tema.ikincil.opacity(0.55))
 
-            Text("Henüz bir kayıt yok")
+            Text(dil.metin("ks.bosBaslik"))
                 .font(.system(size: 14, weight: .semibold, design: .rounded))
                 .foregroundStyle(Tema.metin)
 
-            Text("İlk ölçümünüzü yukarıdaki formdan ekleyin.")
+            Text(dil.metin("ks.bosAlt"))
                 .font(.system(size: 12, weight: .medium, design: .rounded))
                 .foregroundStyle(Tema.ikincil)
         }
@@ -476,10 +487,10 @@ struct ContentView: View {
     private func raporDosyasiOlustur() -> URL? {
         guard !kayitListesi.isEmpty else { return nil }
 
-        var raporMetni = "--- KAN ŞEKERİ TAKİP RAPORU ---\n\n"
+        var raporMetni = "--- \(dil.metin("ks.raporBaslik")) ---\n\n"
         for k in kayitListesi {
-            raporMetni += "Tarih: \(TarihYardimci.uzun.string(from: k.tarih))\n"
-            raporMetni += "K: \(k.kahvaltiAc)/\(k.kahvaltiTok) | Ö: \(k.oglenAc)/\(k.oglenTok) | A: \(k.aksamAc)/\(k.aksamTok)\n"
+            raporMetni += "\(dil.metin("ks.raporTarih")): \(TarihYardimci.uzun(dil.locale).string(from: k.tarih))\n"
+            raporMetni += "\(dil.metin("ks.kahvalti")): \(k.kahvaltiAc)/\(k.kahvaltiTok) | \(dil.metin("ks.ogle")): \(k.oglenAc)/\(k.oglenTok) | \(dil.metin("ks.aksam")): \(k.aksamAc)/\(k.aksamTok)\n"
             raporMetni += "--------------------------------\n"
         }
 
@@ -529,6 +540,8 @@ private struct BolumBasligi: View {
 }
 
 private struct OlcumSatiri: View {
+    @EnvironmentObject private var dil: Yerellestirme
+
     let baslik: String
     let ikon: String
     let renk: Color
@@ -554,8 +567,8 @@ private struct OlcumSatiri: View {
             }
             .frame(width: 54)
 
-            DegerAlani(etiket: "Aç", metin: $ac, odak: odak, alan: acOdak)
-            DegerAlani(etiket: "Tok", metin: $tok, odak: odak, alan: tokOdak)
+            DegerAlani(etiket: dil.metin("ks.ac"), metin: $ac, odak: odak, alan: acOdak)
+            DegerAlani(etiket: dil.metin("ks.tok"), metin: $tok, odak: odak, alan: tokOdak)
         }
     }
 }
@@ -592,6 +605,8 @@ private struct DegerAlani: View {
 }
 
 private struct KayitKarti: View {
+    @EnvironmentObject private var dil: Yerellestirme
+
     let kayit: SekerOlcer
 
     var body: some View {
@@ -599,7 +614,7 @@ private struct KayitKarti: View {
             tarihRozeti
 
             VStack(alignment: .leading, spacing: 10) {
-                Text(TarihYardimci.uzun.string(from: kayit.tarih))
+                Text(TarihYardimci.uzun(dil.locale).string(from: kayit.tarih))
                     .font(.system(size: 13, weight: .semibold, design: .rounded))
                     .foregroundStyle(Tema.metin)
                     .lineLimit(1)
@@ -616,10 +631,10 @@ private struct KayitKarti: View {
 
     private var tarihRozeti: some View {
         VStack(spacing: 1) {
-            Text(TarihYardimci.gun.string(from: kayit.tarih))
+            Text(TarihYardimci.gun(dil.locale).string(from: kayit.tarih))
                 .font(.system(size: 20, weight: .bold, design: .rounded))
 
-            Text(TarihYardimci.ay.string(from: kayit.tarih).uppercased(with: TarihYardimci.tr))
+            Text(TarihYardimci.ay(dil.locale).string(from: kayit.tarih).uppercased(with: dil.locale))
                 .font(.system(size: 10, weight: .bold, design: .rounded))
         }
         .foregroundStyle(.white)
@@ -657,32 +672,35 @@ private struct KayitKarti: View {
 // MARK: - 7. TARİH YARDIMCISI
 
 private enum TarihYardimci {
-    static let tr = Locale(identifier: "tr_TR")
+    private static var onbellek: [String: DateFormatter] = [:]
 
-    static let uzun: DateFormatter = {
-        let f = DateFormatter()
-        f.locale = tr
-        f.dateFormat = "d MMMM yyyy, EEEE"
-        return f
-    }()
+    private static func bicimlendirici(_ desen: String, _ locale: Locale) -> DateFormatter {
+        let anahtar = "\(desen)-\(locale.identifier)"
+        if let hazir = onbellek[anahtar] { return hazir }
 
-    static let gun: DateFormatter = {
         let f = DateFormatter()
-        f.locale = tr
-        f.dateFormat = "d"
+        f.locale = locale
+        f.setLocalizedDateFormatFromTemplate(desen)
+        onbellek[anahtar] = f
         return f
-    }()
+    }
 
-    static let ay: DateFormatter = {
-        let f = DateFormatter()
-        f.locale = tr
-        f.dateFormat = "MMM"
-        return f
-    }()
+    static func uzun(_ locale: Locale) -> DateFormatter {
+        bicimlendirici("dMMMMyyyyEEEE", locale)
+    }
+
+    static func gun(_ locale: Locale) -> DateFormatter {
+        bicimlendirici("d", locale)
+    }
+
+    static func ay(_ locale: Locale) -> DateFormatter {
+        bicimlendirici("MMM", locale)
+    }
 }
 
 // MARK: - 8. ÖNİZLEME
 
 #Preview {
     ContentView()
+        .environmentObject(Yerellestirme())
 }

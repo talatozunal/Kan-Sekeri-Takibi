@@ -6,7 +6,8 @@
 
 <p align="center">
   A calm, single-screen blood sugar diary for iPhone and iPad.<br>
-  Record morning, noon and evening readings, keep them on your device, and share a clean text report.
+  Record morning, noon and evening readings, keep them on your device, and share a clean text report.<br>
+  Available in Turkish, English, German, French and Italian.
 </p>
 
 <p align="center">
@@ -50,7 +51,7 @@ It is a personal tracking tool, **not** a medical device and **not** a substitut
 </p>
 
 <p align="center">
-  <sub>Main screen with the measurement form and the info bar &nbsp;·&nbsp; Info sheet with version, year, responsible person and contact</sub>
+  <sub>Main screen with the measurement form and the info bar &nbsp;·&nbsp; Info sheet with version, year, responsible person, language selector and contact</sub>
 </p>
 
 ## Features
@@ -64,9 +65,26 @@ It is a personal tracking tool, **not** a medical device and **not** a substitut
 - **Light & dark mode** — dynamic colors keep contrast in both appearances.
 - **Single-frame layout** — everything lives inside one rounded card, centered and capped at 620 pt on iPad; no horizontal overflow at any width.
 - **Info bar** — a slim footer with a tappable sheet showing the app version, year, responsible person, contact address and a “Kapat” button.
-- **Turkish UI** — the app is localized for Turkish (`tr_TR`) by design.
+- **Five languages** — Turkish, English, German, French and Italian, switchable from the info sheet without restarting the app.
+
+## Languages
+
+The interface is available in **Turkish, English, German, French and Italian**. The first launch follows the device language; you can change it at any time from **Bilgi → Dil** without restarting the app. The choice is stored in `UserDefaults` (key `appLanguage`), and every label, placeholder, date and report updates immediately.
+
+Turkish is the development language, so it is also the fallback: if a key is missing in the selected language, the Turkish text is shown.
+
+### Adding a new language
+
+1. Duplicate one of the `<code>.lproj` folders (for example `en.lproj`) and rename it to the new language code.
+2. Translate `Localizable.strings` and `InfoPlist.strings`, keeping the keys unchanged.
+3. Add the code to `Yerellestirme.desteklenenDiller` and a case to `UygulamaDili` in `Dil.swift`.
+4. Add the language to `knownRegions` in the Xcode project.
+
+No storyboard or asset changes are needed.
 
 ## How to use
+
+Button names in this README are shown in Turkish; the app uses the same terms in the selected language.
 
 1. Open the app. Today's date is selected automatically.
 2. Enter the readings you have — for example breakfast fasting `110` and post-meal `140`. You do not have to fill all six fields.
@@ -74,6 +92,7 @@ It is a personal tracking tool, **not** a medical device and **not** a substitut
 4. To remove a record, swipe it to the left.
 5. When you need to share the log, tap **Paylaş** in the **Rapor** card. A text file is generated and the iOS share sheet opens.
 6. Tap the **Bilgi** bar at the bottom for version and contact details.
+7. To change the language, tap **Bilgi**, choose a language under **Dil**, then close the sheet — the whole interface updates instantly.
 
 ### Field reference
 
@@ -99,6 +118,7 @@ The footer at the bottom of the main frame is intentionally persistent and small
 
 - “Bu uygulama herhangi bir ücret talep etmemektedir. Geliştirme aşamasındadır.”
 - Version **1.0.0**, year **2026**, responsible **Talat Özünal**
+- A language selector (**Sistem** plus the five languages) that applies immediately
 - Contact: **ozunaltalat@gmail.com** (opens the Mail app)
 - A **Kapat** button
 
@@ -125,6 +145,8 @@ Kan Sekeri Takibi/
 │   ├── Kan_Sekeri_TakibiApp.swift   # App entry point
 │   ├── ContentView.swift            # Model, theme, main screen, history, report
 │   ├── BilgiBari.swift              # Info bar + info sheet
+│   ├── Dil.swift                    # Language manager + language selector
+│   ├── tr.lproj … it.lproj/         # Localizable.strings + InfoPlist.strings
 │   └── Assets.xcassets              # App icon and accent color
 ├── docs/
 │   ├── icon.png
@@ -139,6 +161,7 @@ Kan Sekeri Takibi/
 - `Tema` — dynamic light/dark colors and the blue/cyan gradient.
 - `ContentView` — form, history, persistence and report generation.
 - `BilgiBari` / `BilgiSayfasi` — footer bar and info sheet.
+- `Yerellestirme` / `DilSecici` — language selection persisted in `UserDefaults` and the in-app language menu.
 
 ## Requirements
 
