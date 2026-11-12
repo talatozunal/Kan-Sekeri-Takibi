@@ -11,6 +11,10 @@
 </p>
 
 <p align="center">
+  <a href="https://talatozunal.github.io/Kan-Sekeri-Takibi/"><strong>Web sitesi →</strong></a>
+</p>
+
+<p align="center">
   <a href="README.md">English</a> · <b>Türkçe</b>
 </p>
 
